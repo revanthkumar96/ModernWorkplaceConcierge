@@ -1,4 +1,4 @@
-﻿using ModernWorkplaceConcierge.Helpers;
+using ModernWorkplaceConcierge.Helpers;
 using ModernWorkplaceConcierge.Models;
 using Newtonsoft.Json;
 using System;
@@ -478,6 +478,44 @@ namespace ModernWorkplaceConcierge.Controllers
             }
 
             return new HttpStatusCodeResult(204);
+        }
+
+        public async Task<ActionResult> RunTestMFAForAllUsers(string clientId = null)
+        {
+            SignalRMessage signalR = new SignalRMessage(clientId);
+
+            try
+            {
+                GraphConditionalAccess graphConditionalAccess = new GraphConditionalAccess(clientId);
+                IEnumerable<ConditionalAccessPolicy> policies = await graphConditionalAccess.GetConditionalAccessPoliciesAsync();
+
+                bool hasMFAForAll = policies.Any(p => 
+                    p.state == "enabled" &&
+                    p.conditions.users.includeUsers.Contains("All") &&
+                    p.grantControls != null &&
+                    p.grantControls.builtInControls.Contains("mfa")
+                );
+
+                if (hasMFAForAll)
+                {
+                    signalR.sendMessage("✅ PASS: At least one enabled Conditional Access policy requires MFA for all users.");
+                }
+                else
+                {
+                    signalR.sendMessage("❌ FAIL: No enabled Conditional Access policy requires MFA for all users.");
+                }
+            }
+            catch (Exception e)
+            {
+                signalR.sendMessage("❌ Error: " + e.Message);
+            }
+            return new HttpStatusCodeResult(204);
+        }
+
+        public ViewResult TestMFAForAllUsers()
+        {
+            ViewBag.Current = "ConditionalAccessTestMFAForAllUsers";
+            return View();
         }
     }
 }

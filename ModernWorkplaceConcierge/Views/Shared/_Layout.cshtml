@@ -1,4 +1,4 @@
-﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved.
+<!-- Copyright (c) Microsoft Corporation. All rights reserved.
      Licensed under the MIT License. -->
 
 @{
@@ -101,15 +101,9 @@
 
                             @Html.ActionLink("Import", "Import", "ConditionalAccess", new { area = "" },
                            new { @class = ViewBag.Current == "ConditionalAccessImport" ? "dropdown-item active" : "dropdown-item" })
-                        </div>
-                    </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="dropdown-toggle @((ViewBag.Current.StartsWith("Planner")  ? "nav-link active" : "nav-link"))" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Office 365</a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            @Html.ActionLink("Import Planner Tasks", "Index", "Planner", new { area = "" },
-                            new { @class = ViewBag.Current == "PlannerImport" ? "dropdown-item active" : "dropdown-item" })
-
+                            @Html.ActionLink("Test MFA for All Users", "TestMFAForAllUsers", "ConditionalAccess", new { area = "" },
+                           new { @class = ViewBag.Current == "ConditionalAccessTestMFAForAllUsers" ? "dropdown-item active" : "dropdown-item" })
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -232,7 +226,7 @@
     <footer class="footer mt-auto fixed-bottom py-2">
         <div class="container">
             <span class="badge badge-secondary">@System.Configuration.ConfigurationManager.AppSettings["InstanceType"].ToString()</span>
-            <span class="float-md-right text-nowrap">Presented by <a href="https://tech.nicolonsky.ch" target="_blank">Nicola Suter</a></span>
+            <span class="float-md-right text-nowrap">Presented by <a href="https://tech.nicolonsky.ch" target="_blank">Chrls.tjokro</a></span>
         </div>
     </footer>
     @Scripts.Render("~/bundles/jquery")
